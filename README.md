@@ -4,19 +4,18 @@ Here are some notes/instructions for embedding the LuaJIT in C. Initially, we fo
 
 ### Prerequisites
 
-If LuaJIT and Luarocks aren't already installed, you'll need to install [LuaJIT](http://luajit.org/install.html) and [Luarocks](https://github.com/keplerproject/luarocks/wiki/Download). If you use the Torch installation, you may have an issue with linking, so either download releases or build directly from source.
+If LuaJIT and Luarocks aren't already installed, you'll need to install them. Follow the instructions here: http://torch.ch/docs/getting-started.html
 
 ## Hello, World!
 
 Let's start by creating a Lua script named hello.lua which contains ```print('Hello, World!')```. Next, create a C file hello-luajit.c which looks like this (modified from the above blog post):
-
-https://gist.github.com/klgraham/6d4f937abf39e56d48381a3c40369920
 
 ```
 #include <stdio.h>
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
+#include "luajit.h"
 
 int main(int argc, char *argv[])
 {
@@ -45,7 +44,7 @@ int main(int argc, char *argv[])
 
 To compile the C, use:
 
-```gcc hello-luajit.c $(pkg-config --cflags --libs luajit) -lm -ldl -pagezero_size 10000 -image_base 100000000 -o hello.out```, noting that ```-pagezero_size 10000 -image_base 100000000``` only needs to be included on macOS systems.
+```gcc hello-luajit.c $(pkg-config --cflags --libs luajit) -lm -ldl -pagezero_size 10000 -image_base 100000000 -I <path to torch's include directory> -o hello.out```, noting that ```-pagezero_size 10000 -image_base 100000000``` only needs to be included on macOS systems. Also note how the LuaJIT include directory has been included in the compiler search path. 
 
 You can now execute the Lua script with ```./hello.out hello.lua```.
 
@@ -83,6 +82,7 @@ From C, we'll call factorial.lua and then get the result from the Lua stack and 
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
+#include "luajit.h"
 
 int main(int argc, char *argv[])
 {
@@ -124,6 +124,10 @@ This example is pretty simple:
 
 You'll notice that at the end we pop the returned value from the stack with ```lua_pop```. For such a simple example, this is not needed since we're killing Lua afterwards, but for more complex uses you'll definitely want to clean up the stack before moving on.
 
-You can compile with ```gcc factorial-luajit.c $(pkg-config --cflags --libs luajit) -lm -ldl -pagezero_size 10000 -image_base 100000000  -o fact.out```.
+You can compile with ```gcc factorial-luajit.c $(pkg-config --cflags --libs luajit) -lm -ldl -pagezero_size 10000 -image_base 100000000 -I <path to torch's include directory> -o fact.out```. You can run with ```./fact.out <some integer>```
 
+
+See jni_notes.md for examples of how to use LuaJIT from Java.
+
+## Using Torch from C
 
