@@ -4,7 +4,7 @@ Here are some notes/instructions for embedding the LuaJIT in C. Initially, we fo
 
 ### Prerequisites
 
-Before we begin, you'll need to install [LuaJIT](http://luajit.org/install.html) and [Luarocks](https://github.com/keplerproject/luarocks/wiki/Download). If you use the Torch installation, you may have an issue with linking, so either download releases or build directly from source.
+If LuaJIT and Luarocks aren't already installed, you'll need to install [LuaJIT](http://luajit.org/install.html) and [Luarocks](https://github.com/keplerproject/luarocks/wiki/Download). If you use the Torch installation, you may have an issue with linking, so either download releases or build directly from source.
 
 ## Hello, World!
 
