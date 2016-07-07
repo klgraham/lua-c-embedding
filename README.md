@@ -12,6 +12,37 @@ Let's start by creating a Lua script named hello.lua which contains ```print('He
 
 https://gist.github.com/klgraham/6d4f937abf39e56d48381a3c40369920
 
+```
+#include <stdio.h>
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
+
+int main(int argc, char *argv[])
+{
+  int status;
+  lua_State *L;
+  
+  L = luaL_newstate(); // open Lua
+  if (!L) {
+    return -1; // Checks that Lua started up
+  }
+  
+  luaL_openlibs(L); // load Lua libraries
+  if (argc > 1) {
+    status = luaL_loadfile(L, argv[1]);  // load Lua script
+    int ret = lua_pcall(L, 0, 0, 0); // tell Lua to run the script
+    if (ret != 0) {
+      fprintf(stderr, "%s\n", lua_tostring(L, -1)); // tell us what mistake we made
+      return 1;
+    }
+  }
+
+  lua_close(L); // Close Lua
+  return 0;
+}
+```
+
 To compile the C, use:
 
 ```gcc hello-luajit.c $(pkg-config --cflags --libs luajit) -lm -ldl -pagezero_size 10000 -image_base 100000000 -o hello.out```, noting that ```-pagezero_size 10000 -image_base 100000000``` only needs to be included on macOS systems.
@@ -46,7 +77,41 @@ end
 
 From C, we'll call factorial.lua and then get the result from the Lua stack and print to stdout.
 
-https://gist.github.com/klgraham/35bd1d2b0f4b57be5d2bbc30f6721d46
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
+
+int main(int argc, char *argv[])
+{
+  lua_State *L;
+  
+  L = luaL_newstate(); // open Lua 
+  luaL_openlibs(L); // load Lua libraries
+  int n = atoi(argv[1]);
+
+  luaL_loadfile(L, "factorial.lua");
+  lua_pcall(L, 0, 0, 0); // Execute script once to create and assign functions
+	
+  lua_getglobal(L, "factorial"); // function to be called
+  lua_pushnumber(L, n); // push argument
+	
+  if (lua_pcall(L, 1, 1, 0) != 0) // 1 argument, 1 return value
+  {
+    fprintf(stderr, "%s\n", lua_tostring(L, -1));
+    return 1;
+  }
+  
+  int result = lua_tonumber(L, -1);
+  lua_pop(L, 1); // pop returned value
+  printf("%d! is %d\n", n, result);  
+    
+  lua_close(L); 
+  return 0;
+}
+```
 
 This example is pretty simple:
 
