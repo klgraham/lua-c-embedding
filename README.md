@@ -60,7 +60,9 @@ To interact with Lua from C we will use [Lua's C API](http://www.lua.org/pil/24.
 
 ## Using the Lua Stack
 
-Lua uses a stack to exchange values with C. To get a value from Lua, you call Lua to push the value onto the stack. To pass a value from C to Lua, you call Lua to push the value onto the stack and then pop the value. When pushing a value onto the stack, it's important to know if the stack has room for the new value. The Lua Programming Book has [a nice example of this](http://lua-users.org/wiki/SimpleLuaApiExample). Let's look at an example.
+Lua uses a stack to exchange values with C. To get a value from Lua, you call Lua to push the value onto the stack. To pass a value from C to Lua, you call Lua to push the value onto the stack and then pop the value. When pushing a value onto the stack, it's important to know if the stack has room for the new value. The lua-users wiki has [a nice example of this](http://lua-users.org/wiki/SimpleLuaApiExample). Let's look a couple of examples.
+
+### Example 1
 
 Suppose we want to compute the factorial of a number in Lua and make the result of the computation available in C. The Lua code is in the file factorial.lua:
 
@@ -126,6 +128,30 @@ You'll notice that at the end we pop the returned value from the stack with ```l
 
 You can compile with ```gcc factorial-luajit.c $(pkg-config --cflags --libs luajit) -lm -ldl -pagezero_size 10000 -image_base 100000000 -I <path to torch's include directory> -o fact.out```. You can run with ```./fact.out <some integer>```
 
+### Example 2
+
+Now we'll use Torch to compute the trace of a matrix. For this, we'll simply execute a Lua script that requires Torch:
+
+```
+require('torch');
+
+--[[
+  This function returns a matrix representation of an element of the group SO(2),
+  the 2D rotation group.
+--]]
+function rotation(theta)
+  m = torch.Tensor(2,2)
+  m[1][1] = torch.cos(theta)
+  m[2][1] = torch.sin(theta)
+  m[1][2] = -m[2][1]
+  m[2][2] = m[1][1]
+  return m
+end
+
+print(rotation(angleInRadians))
+```
+
+For this, we'll need to push an angle in radians onto the stack, and assign it to the global value ```angleInRadians```. You should be able to do this on your own now. If you run into any trouble, just look at torch-test.c.
 
 See jni_notes.md for examples of how to use LuaJIT from Java.
 
