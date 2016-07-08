@@ -4,7 +4,7 @@ Here are some notes/instructions for embedding the LuaJIT in C. Initially, we fo
 
 ### Prerequisites
 
-If LuaJIT and Luarocks aren't already installed, you'll need to install them. Follow the instructions here: http://torch.ch/docs/getting-started.html
+If [LuaJIT](http://luajit.org/download.html) and [Luarocks](https://github.com/keplerproject/luarocks/wiki/Download) aren't already installed, you'll need to install them. I used LuaJIT 2.1.0-beta2. What follows assumes that you've installed them from source or via a package manager like Homebrew. For compilation, I've used gcc, but have also checked that clang should work without issue. On macOS clang might be a better option.
 
 ## Hello, World!
 
@@ -44,13 +44,13 @@ int main(int argc, char *argv[])
 
 To compile the C, use:
 
-```gcc hello-luajit.c $(pkg-config --cflags --libs luajit) -lm -ldl -pagezero_size 10000 -image_base 100000000 -I <path to torch's include directory> -o hello.out```, noting that ```-pagezero_size 10000 -image_base 100000000``` only needs to be included on macOS systems. Also note how the LuaJIT include directory has been included in the compiler search path. 
+```gcc hello-luajit.c -pagezero_size 10000 -image_base 100000000 -I/usr/local/include/luajit-2.1 -L/usr/local/lib -lluajit -o hello.out```, noting that ```-pagezero_size 10000 -image_base 100000000``` only needs to be included on macOS systems. Also note how the LuaJIT include directory has been included in the compiler search path. 
 
 You can now execute the Lua script with ```./hello.out hello.lua```.
 
 ### Understanding the C Code
 
-To interact with Lua from C we will use [Lua's C API](http://www.lua.org/pil/24.1.html). Let's look at the each part of hello-luajit.c.
+To interact with Lua from C we will use [Lua's C API](http://www.lua.org/pil/24.1.html). See http://pgl.yoyo.org/luai/i/_ for great documentation on the functions in Lua's C API. Let's look at the each part of hello-luajit.c. 
 
 - ```luaL_newstate```: Starts up Lua and returns a new Lua state
 - ```luaL_openlibs```: loads the Lua standard libraries
@@ -126,34 +126,25 @@ This example is pretty simple:
 
 You'll notice that at the end we pop the returned value from the stack with ```lua_pop```. For such a simple example, this is not needed since we're killing Lua afterwards, but for more complex uses you'll definitely want to clean up the stack before moving on.
 
-You can compile with ```gcc factorial-luajit.c $(pkg-config --cflags --libs luajit) -lm -ldl -pagezero_size 10000 -image_base 100000000 -I <path to torch's include directory> -o fact.out```. You can run with ```./fact.out <some integer>```
+You can compile with ```gcc factorial-luajit.c -pagezero_size 10000 -image_base 100000000 -I/usr/local/include/luajit-2.1 -L/usr/local/lib -lluajit -o fact.out```. You can run with ```./fact.out <some integer>```
 
 ### Example 2
 
 Now we'll use Torch to compute the trace of a matrix. For this, we'll simply execute a Lua script that requires Torch:
 
 ```
-require('torch');
+require('torch')
 
---[[
-  This function returns a matrix representation of an element of the group SO(2),
-  the 2D rotation group.
---]]
-function rotation(theta)
-  m = torch.Tensor(2,2)
-  m[1][1] = torch.cos(theta)
-  m[2][1] = torch.sin(theta)
-  m[1][2] = -m[2][1]
-  m[2][2] = m[1][1]
-  return m
+function cosine(theta)
+  return torch.cos(theta)
 end
-
-print(rotation(angleInRadians))
 ```
 
-For this, we'll need to push an angle in radians onto the stack, and assign it to the global value ```angleInRadians```. You should be able to do this on your own now. If you run into any trouble, just look at torch-test.c.
+This example is functionally identical to the previous one. You should be able to do this on your own now. If you run into any trouble, just look at torch-test.c.
+
+## Using Lua From Java
 
 See jni_notes.md for examples of how to use LuaJIT from Java.
 
-## Using Torch from C
+
 
