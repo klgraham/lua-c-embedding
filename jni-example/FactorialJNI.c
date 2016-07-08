@@ -1,6 +1,10 @@
 #include <jni.h>
 #include <stdio.h>
 #include "FactorialJNI.h"
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
+#include "luajit.h"
 
 JNIEXPORT jint JNICALL Java_FactorialJNI_factorial(JNIEnv *env, jobject thisObj, jint n) 
 {
@@ -13,7 +17,7 @@ JNIEXPORT jint JNICALL Java_FactorialJNI_factorial(JNIEnv *env, jobject thisObj,
   luaL_loadfile(L, "factorial.lua");
   lua_pcall(L, 0, 0, 0);
   lua_getglobal(L, "factorial");
-  lua_pushnumber(L, n);
+  lua_pushnumber(L, (int)n);
   
   if (lua_pcall(L, 1, 1, 0) != 0) 
   {
