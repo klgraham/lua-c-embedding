@@ -5,14 +5,11 @@
 #include <lualib.h>
 #include <lauxlib.h>
 #include "luajit.h"
+#include "luatorch.h"
 
 JNIEXPORT jint JNICALL Java_FactorialJNI_factorial(JNIEnv *env, jobject thisObj, jint n) 
 {
-  lua_State *L;
-
-  L = luaL_newstate(); // open Lua
-  luaL_openlibs(L); // load Lua libraries
-
+	lua_State* L = initlua();
   jint result;
   luaL_loadfile(L, "factorial.lua");
   lua_pcall(L, 0, 0, 0);
@@ -27,6 +24,6 @@ JNIEXPORT jint JNICALL Java_FactorialJNI_factorial(JNIEnv *env, jobject thisObj,
 
   result = lua_tonumber(L, -1);
   lua_pop(L, 1);
-  lua_close(L);
+	closeLua(L);
   return result;
 }
