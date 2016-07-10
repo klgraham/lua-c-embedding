@@ -43,7 +43,7 @@ Notice that we're including the location of JAVA_HOME/include, are creating a sh
 
 ## Using Lua from Java
 
-We're going to adapt the earlier Lua example where we compute the factorial of a number. This is on the jni-example branch. **Am currently having the problem where all the LuaJIT/Torch integration examples looked at thus far work perfectly well, but the JNI examples do not. For some reason, the ```lua_newstate()``` command is not working when using the JNI.**
+We're going to adapt the earlier Lua example where we compute the factorial of a number. This is on the jni-example branch. **Am currently having the problem where all the LuaJIT/Torch integration examples looked at thus far work perfectly well, but the JNI examples do not. For some reason, the ```luaL_newstate()``` command is not working when using the JNI.**
 
 Have tried using the JNI explicitly, in jni-example/jni. You can build and run (though the run fails) by using this:
 
@@ -64,3 +64,5 @@ Some notes about other users who have gotten a similar problem, though only on t
 Based on the last of the above links, I think the issue is that ```-pagezero_size 10000 -image_base 100000000``` is not included when compiling the JNI stuff. The problem is that when it is included, the compiler says 
 >-pagezero_size option can only be used when linking a main executable
 which means those params can't be used for shared libraries (which JNI needs).
+
+I've confirmed that the above is the problem via [a thread](http://www.freelists.org/post/luajit/luaL-newstate-fails-on-64bit-Mac-cant-set-linker-flags) involving Lua's maintainer, Mike Pall. This is specifically an issue on 64-bit macOS. If I compile a 32-bit LuaJIT from source, then I should be able to get things to work. But, a 32-bit version might not be as useful for our purposes.
