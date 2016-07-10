@@ -4,13 +4,26 @@
 #include <lualib.h>
 #include <lauxlib.h>
 #include "luajit.h"
+#include "factorial.h"
+
+lua_State* init_lua()
+{
+  lua_State *L;
+  L = luaL_newstate(); // open Lua 
+  luaL_openlibs(L); // load Lua libraries
+	return L;
+}
+
+void end_lua(lua_State* L)
+{
+  lua_close(L);
+}
 
 int factorial(int n)
 {
   lua_State *L;
   
-  L = luaL_newstate(); // open Lua 
-  luaL_openlibs(L); // load Lua libraries
+  L = init_lua();
   luaL_loadfile(L, "factorial.lua");
   lua_pcall(L, 0, 0, 0); // Execute script once to create and assign functions
 	
@@ -27,6 +40,6 @@ int factorial(int n)
   lua_pop(L, 1); // pop returned value
   printf("%d! is %d\n", n, result);  
     
-  lua_close(L); 
+  end_lua(L); 
   return result;
 }

@@ -204,7 +204,11 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
 #define SWIG_contract_assert(nullreturn, expr, msg) if (!(expr)) {SWIG_JavaThrowException(jenv, SWIG_JavaIllegalArgumentException, msg); return nullreturn; } else
 
 
-extern int factorial(int n);
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
+#include "luajit.h"
+#include "factorial.h"
 
 
 #ifdef __cplusplus
@@ -222,6 +226,28 @@ SWIGEXPORT jint JNICALL Java_factorialJNI_factorial(JNIEnv *jenv, jclass jcls, j
   result = (int)factorial(arg1);
   jresult = (jint)result; 
   return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_factorialJNI_init_1lua(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  lua_State *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (lua_State *)init_lua();
+  *(lua_State **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_factorialJNI_end_1lua(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  lua_State *arg1 = (lua_State *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(lua_State **)&jarg1; 
+  end_lua(arg1);
 }
 
 

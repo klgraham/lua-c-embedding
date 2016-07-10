@@ -12,4 +12,13 @@ public class factorial {
     return factorialJNI.factorial(n);
   }
 
+  public static SWIGTYPE_p_lua_State init_lua() {
+    long cPtr = factorialJNI.init_lua();
+    return (cPtr == 0) ? null : new SWIGTYPE_p_lua_State(cPtr, false);
+  }
+
+  public static void end_lua(SWIGTYPE_p_lua_State L) {
+    factorialJNI.end_lua(SWIGTYPE_p_lua_State.getCPtr(L));
+  }
+
 }

@@ -7,8 +7,19 @@
  * ----------------------------------------------------------------------------- */
 
 
-public class factorialJNI {
-  public final static native int factorial(int jarg1);
-  public final static native long init_lua();
-  public final static native void end_lua(long jarg1);
+public class SWIGTYPE_p_lua_State {
+  private transient long swigCPtr;
+
+  protected SWIGTYPE_p_lua_State(long cPtr, @SuppressWarnings("unused") boolean futureUse) {
+    swigCPtr = cPtr;
+  }
+
+  protected SWIGTYPE_p_lua_State() {
+    swigCPtr = 0;
+  }
+
+  protected static long getCPtr(SWIGTYPE_p_lua_State obj) {
+    return (obj == null) ? 0 : obj.swigCPtr;
+  }
 }
+
