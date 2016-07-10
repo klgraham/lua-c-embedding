@@ -41,6 +41,13 @@ JNIEXPORT jint JNICALL Java_FactorialJNI_factorial(JNIEnv *env, jobject thisObj,
 	
   lua_State *L;
   L = luaL_newstate();
+	printf("lua_State: %p\n", L);
+	if (!L)
+	{
+    fprintf(stderr, "%s\n", "Cannot create new Lua state!");
+		exit(-1);
+	}
+  printf("lua_State: %p\n", L);
   luaL_openlibs(L); 
 	// lua_State* L = init_lua();
   jint result;

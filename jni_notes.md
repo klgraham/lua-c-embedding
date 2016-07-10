@@ -43,7 +43,13 @@ Notice that we're including the location of JAVA_HOME/include, are creating a sh
 
 ## Using Lua from Java
 
-We're going to adapt the earlier Lua example where we compute the factorial of a number.
+We're going to adapt the earlier Lua example where we compute the factorial of a number. This is on the jni-example branch.
 
+Have tried using the JNI explicitly, in jni-example/jni. You can build and run (though the run fails) by using this:
 
+```make && java FactorialJNI <full path to libfactorial.dylib> <int of your choice>```
+
+Have also tried using Swig, in jni-example/swig, which is a bit simpler. You can build and run (though the run fails) by using this:
+
+```./build.sh && java main <full path to libfactorial.dylib> <int of your choice>```
 

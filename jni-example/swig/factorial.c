@@ -8,9 +8,16 @@
 
 lua_State* init_lua()
 {
-  lua_State *L;
-  L = luaL_newstate(); // open Lua 
+  lua_State *L = luaL_newstate(); // open Lua 
+	printf("lua_State: %p\n", L);
+	if (!L)
+	{
+    fprintf(stderr, "%s\n", "Cannot create new Lua state!");
+		exit(-1);
+	}
+  printf("lua_State: %p\n", L);
   luaL_openlibs(L); // load Lua libraries
+	printf("loaded Lua libs.\n");
 	return L;
 }
 
@@ -21,9 +28,9 @@ void end_lua(lua_State* L)
 
 int factorial(int n)
 {
-  lua_State *L;
-  
-  L = init_lua();
+  lua_State *L = init_lua();
+	printf("lua_State: %p", L);
+	
   luaL_loadfile(L, "factorial.lua");
   lua_pcall(L, 0, 0, 0); // Execute script once to create and assign functions
 	
