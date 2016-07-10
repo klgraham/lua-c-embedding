@@ -53,3 +53,14 @@ Have also tried using Swig, in jni-example/swig, which is a bit simpler. You can
 
 ```./build.sh && java main <full path to libfactorial.dylib> <int of your choice>```
 
+Some notes about other users who have gotten a similar problem, though only on the C-side. Note that I get the pure C examples working fine:
+
+- http://comments.gmane.org/gmane.comp.lang.lua.luajit/4817
+- http://stackoverflow.com/questions/14840569/sigsegv-error-in-some-lua-c-code
+- http://stackoverflow.com/questions/13400660/binding-lua-in-static-library-segfault?rq=1
+- http://nticformation.com/solutions_problems.php?tuto=59091&subCategory=c+lua+jni+luajit&Category=C+Language
+
+
+Based on the last of the above links, I think the issue is that ```-pagezero_size 10000 -image_base 100000000``` is not included when compiling the JNI stuff. The problem is that when it is included, the compiler says 
+>-pagezero_size option can only be used when linking a main executable
+which means those params can't be used for shared libraries (which JNI needs).
