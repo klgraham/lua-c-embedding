@@ -4,7 +4,7 @@ public class FactorialJNI
 		
   public static void main(String[] args)
   {
-		System.load(args[0]);		
+    System.load(args[0]);		
     int n = Integer.valueOf(args[1]);
 		
     FactorialJNI jni = new FactorialJNI();
