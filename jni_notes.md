@@ -65,4 +65,6 @@ Based on the last of the above links, I think the issue is that ```-pagezero_siz
 >-pagezero_size option can only be used when linking a main executable
 which means those params can't be used for shared libraries (which JNI needs).
 
-I've confirmed that the above is the problem via [a thread](http://www.freelists.org/post/luajit/luaL-newstate-fails-on-64bit-Mac-cant-set-linker-flags) involving Lua's maintainer, Mike Pall. This is specifically an issue on 64-bit macOS. If I compile a 32-bit LuaJIT from source, then I should be able to get things to work. But, a 32-bit version might not be as useful for our purposes.
+I've confirmed that the above is the problem via [a thread](http://www.freelists.org/post/luajit/luaL-newstate-fails-on-64bit-Mac-cant-set-linker-flags) involving Lua's maintainer, Mike Pall. This is specifically an issue on 64-bit macOS. If I compile a 32-bit LuaJIT from source, then I should be able to get things to work. But, a 32-bit version might not be as useful for our purposes. To build the 32-bit LuaJIT binary, you can run the following commands inside the LuaJIT directory:
+
+```CFLAGS="-arch i386" GCCFLAGS="-arch i386" LDFLAGS="-arch i386" make && sudo make install```
