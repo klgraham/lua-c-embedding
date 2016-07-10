@@ -43,7 +43,7 @@ Notice that we're including the location of JAVA_HOME/include, are creating a sh
 
 ## Using Lua from Java
 
-We're going to adapt the earlier Lua example where we compute the factorial of a number. This is on the jni-example branch.
+We're going to adapt the earlier Lua example where we compute the factorial of a number. This is on the jni-example branch. **Am currently having the problem where all the LuaJIT/Torch integration examples looked at thus far work perfectly well, but the JNI examples do not. For some reason, the ```lua_newstate()``` command is not working when using the JNI.**
 
 Have tried using the JNI explicitly, in jni-example/jni. You can build and run (though the run fails) by using this:
 
