@@ -1,9 +1,6 @@
 CC=gcc 
-LUAFLAGS=-I/usr/local/include -I/Users/kgraham/Tools/torch/install/include -L/usr/local/lib -L/Users/kgraham/Tools/torch/install/lib -llua -lm -shared
+LUAFLAGS=-I/usr/local/include -I$(TORCH_HOME)/install/include -L/usr/local/lib -L$(TORCH_HOME)/install/lib -llua -lm -shared
 CFLAGS=-I$(JAVA_HOME)/include $(LUAFLAGS) -I. -fPIC
-
-
-# gcc -o libfactorial.dylib -I"$JAVA_HOME/include" -shared  -I/usr/local/include/luajit-2.1 -L/usr/local/lib -lluajit -lm -ldl FactorialJNI.c
 
 all: libfactorial.dylib
 
