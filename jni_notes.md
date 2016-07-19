@@ -43,7 +43,7 @@ Notice that we're including the location of JAVA_HOME/include, are creating a sh
 
 ## Using Torch from Java
 
-We're going to adapt the earlier example where we compute the factorial of a number. This is on the jni-example branch. You can build and run in the ```jni-example/jni``` directory by using this:
+We're going to adapt the earlier example where we compute the factorial of a number. This is on the jni-example branch. You can build and run in the ```jni-example``` directory by using this:
 
 ```make && java FactorialJNI <full path to libfactorial.dylib> <int of your choice>```
 
