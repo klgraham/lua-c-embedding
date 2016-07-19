@@ -1,23 +1,24 @@
-# luajit-c-embedding
+# lua-c-embedding
 
-Here are some notes/instructions for embedding the LuaJIT in C. Initially, we follow along with [Marek Vavrusa's blog post](https://en.blog.nic.cz/2015/08/12/embedding-luajit-in-30-minutes-or-so/). Later, we move beyond and see how to interact with things in Torch.
+Here are some notes/instructions for embedding Lua in C. Initially, we follow along with [Marek Vavrusa's blog post](https://en.blog.nic.cz/2015/08/12/embedding-luajit-in-30-minutes-or-so/). Later, we move beyond and see how to interact with things in Torch.
+
+Note: This was initially setup to embed the LuaJIT, but I then discovered the issue with building 64-bit LuaJIT library to use with the JNI. So, I switched to plain Lua instead.
 
 ### Prerequisites
 
-If [LuaJIT](http://luajit.org/download.html) and [Luarocks](https://github.com/keplerproject/luarocks/wiki/Download) aren't already installed, you'll need to install them. I used LuaJIT 2.1.0-beta2. What follows assumes that you've installed them from source or via a package manager like Homebrew. For compilation, I've used gcc, but have also checked that clang should work without issue. On macOS clang might be a better option.
+Follow the instructions to install Lua and Torch here: http://torch.ch/docs/getting-started.html
 
 ## Hello, World!
 
-Let's start by creating a Lua script named hello.lua which contains ```print('Hello, World!')```. Next, create a C file hello-luajit.c which looks like this (modified from the above blog post):
+Let's start by creating a Lua script named hello.lua which contains ```print('Hello, World!')```. Next, create a C file hello.c which looks like this (modified from the above blog post):
 
 ```
 #include <stdio.h>
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
-#include "luajit.h"
 
-int main(int argc, char *argv[])
+int main()
 {
   int status;
   lua_State *L;
@@ -28,13 +29,12 @@ int main(int argc, char *argv[])
   }
   
   luaL_openlibs(L); // load Lua libraries
-  if (argc > 1) {
-    status = luaL_loadfile(L, argv[1]);  // load Lua script
-    int ret = lua_pcall(L, 0, 0, 0); // tell Lua to run the script
-    if (ret != 0) {
-      fprintf(stderr, "%s\n", lua_tostring(L, -1)); // tell us what mistake we made
-      return 1;
-    }
+
+  status = luaL_loadfile(L, argv[1]);  // load Lua script
+  int ret = lua_pcall(L, 0, 0, 0); // tell Lua to run the script
+  if (ret != 0) {
+    fprintf(stderr, "%s\n", lua_tostring(L, -1)); // tell us what mistake we made
+    return 1;
   }
 
   lua_close(L); // Close Lua
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 
 To compile the C, use:
 
-```gcc hello-luajit.c -pagezero_size 10000 -image_base 100000000 -I/usr/local/include/luajit-2.1 -L/usr/local/lib -lluajit -o hello.out```, noting that ```-pagezero_size 10000 -image_base 100000000``` only needs to be included on macOS systems. Also note how the LuaJIT include directory has been included in the compiler search path. 
+```gcc hello.c -pagezero_size 10000 -image_base 100000000 -Itorch/install/include -I/usr/local/include -L/usr/local/lib -Ltorch/install/lib -llua -lm -o hello.out```, noting that ```-pagezero_size 10000 -image_base 100000000``` only needs to be included on macOS systems. Also note how the LuaJIT include directory has been included in the compiler search path. 
 
 You can now execute the Lua script with ```./hello.out hello.lua```.
 
@@ -84,7 +84,6 @@ From C, we'll call factorial.lua and then get the result from the Lua stack and 
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
-#include "luajit.h"
 
 int main(int argc, char *argv[])
 {
@@ -126,7 +125,7 @@ This example is pretty simple:
 
 You'll notice that at the end we pop the returned value from the stack with ```lua_pop```. For such a simple example, this is not needed since we're killing Lua afterwards, but for more complex uses you'll definitely want to clean up the stack before moving on.
 
-You can compile with ```gcc factorial-luajit.c -pagezero_size 10000 -image_base 100000000 -I/usr/local/include/luajit-2.1 -L/usr/local/lib -lluajit -o fact.out```. You can run with ```./fact.out <some integer>```
+You can compile with ```gcc factorial.c -pagezero_size 10000 -image_base 100000000 -Itorch/install/include -I/usr/local/include -L/usr/local/lib -Ltorch/install/lib -llua -lm -o fact.out```. You can run with ```./fact.out <some integer>```
 
 ### Example 2
 
@@ -144,7 +143,7 @@ This example is functionally identical to the previous one. You should be able t
 
 ## Using Lua From Java
 
-See jni_notes.md for examples of how to use LuaJIT from Java.
+See jni_notes.md for examples of how to use Lua from Java.
 
 
 
