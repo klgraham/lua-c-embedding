@@ -4,7 +4,6 @@
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
-#include "luajit.h"
 #include <execinfo.h>
 #include <signal.h>
 #include <stdlib.h>

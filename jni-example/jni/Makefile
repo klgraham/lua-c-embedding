@@ -1,5 +1,5 @@
 CC=gcc 
-LUAFLAGS=-I/usr/local/include/luajit-2.1 -L/usr/local/lib -lluajit -lm -ldl -shared
+LUAFLAGS=-I/usr/local/include -I/Users/kgraham/Tools/torch/install/include -L/usr/local/lib -L/Users/kgraham/Tools/torch/install/lib -llua -lm -shared
 CFLAGS=-I$(JAVA_HOME)/include $(LUAFLAGS) -I. -fPIC
 
 
