@@ -4,13 +4,19 @@ Here are some notes/instructions for embedding Lua in C. Initially, we follow al
 
 Note: This was initially setup to embed the LuaJIT, but I then discovered the issue with building 64-bit LuaJIT library to use with the JNI. So, I switched to plain Lua instead.
 
-### Prerequisites
+### Install Torch and Lua
 
-Follow the instructions to install Lua and Torch here: http://torch.ch/docs/getting-started.html
+This repo includes the Torch distribution. Installation instrutions follow:
+
+- ```git clone https://github.com/klgraham/luajit-c-embedding.git ~/lua-c-embedding --recursive```
+- ```cd ~/lua-c-embedding```
+- ```TORCH_LUA_VERSION=LUA52 ./install.sh```
+- ```cd ..```
+- setup an environment variable ```$TORCH_HOME``` pointing to your torch installation, which is ```~/lua-c-embedding/torch-distro/install```
 
 ## Hello, World!
 
-Let's start by creating a Lua script named hello.lua which contains ```print('Hello, World!')```. Next, create a C file hello.c which looks like this (modified from the above blog post):
+Let's start with a ubiquitous example. Move to the hello-world directory with ```cd hello-world```. You'll notice a Lua script named hello.lua which contains ```print('Hello, World!')``` and a C file hello.c which looks like this (modified from the above blog post):
 
 ```
 #include <stdio.h>
@@ -44,7 +50,7 @@ int main()
 
 To compile the C, use:
 
-```gcc hello.c -pagezero_size 10000 -image_base 100000000 -Itorch/install/include -I/usr/local/include -L/usr/local/lib -Ltorch/install/lib -llua -lm -o hello.out```, noting that ```-pagezero_size 10000 -image_base 100000000``` only needs to be included on macOS systems. Also note how the LuaJIT include directory has been included in the compiler search path. 
+```gcc hello.c -pagezero_size 10000 -image_base 100000000 -I$(TORCH_HOME)/include -I/usr/local/include -L/usr/local/lib -L$(TORCH_HOME)/lib -llua -lm -o hello.out```, noting that ```-pagezero_size 10000 -image_base 100000000``` only needs to be included on macOS systems. Also note how the LuaJIT include directory has been included in the compiler search path. 
 
 You can now execute the Lua script with ```./hello.out hello.lua```.
 
@@ -125,7 +131,7 @@ This example is pretty simple:
 
 You'll notice that at the end we pop the returned value from the stack with ```lua_pop```. For such a simple example, this is not needed since we're killing Lua afterwards, but for more complex uses you'll definitely want to clean up the stack before moving on.
 
-You can compile with ```gcc factorial.c -pagezero_size 10000 -image_base 100000000 -Itorch/install/include -I/usr/local/include -L/usr/local/lib -Ltorch/install/lib -llua -lm -o fact.out```. You can run with ```./fact.out <some integer>```
+You can compile with ```gcc factorial.c -pagezero_size 10000 -image_base 100000000 -I$(TORCH_HOME)/include -I/usr/local/include -L/usr/local/lib -L$(TORCH_HOME)/lib -llua -lm -o fact.out```. You can run with ```./fact.out <some integer>```
 
 ### Example 2
 
