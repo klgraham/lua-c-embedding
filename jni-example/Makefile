@@ -1,5 +1,5 @@
 CC=gcc 
-LUAFLAGS=-I/usr/local/include -I$(TORCH_HOME)/install/include -L/usr/local/lib -L$(TORCH_HOME)/install/lib -llua -lm -shared
+LUAFLAGS=-I/usr/local/include -I$(TORCH_HOME)/include -L/usr/local/lib -L$(TORCH_HOME)/lib -llua -lm -shared
 CFLAGS=-I$(JAVA_HOME)/include $(LUAFLAGS) -I. -fPIC
 
 all: libfactorial.dylib

@@ -13,11 +13,11 @@ This repo includes the Torch distribution. Installation instrutions follow:
 - install dependencies: ```bash install-deps```
 - install Lua, LuaRocks, and Torch: ```TORCH_LUA_VERSION=LUA52 ./install.sh```
 - ```cd ..```
-- creating an environment variable ```$TORCH_HOME``` pointing to your torch installation, which is ```~/lua-c-embedding/torch-distro/install```
+- creating an environment variable ```$TORCH_HOME``` pointing to your torch installation, which is ```~/lua-c-embedding/torch-distro/install```. Note that if you skip this step, you'll need to update the makefiles in the JNI examples.
 
 ## Hello, World!
 
-Let's start with a ubiquitous example. Move to the hello-world directory with ```cd hello-world```. You'll notice a Lua script named hello.lua which contains ```print('Hello, World!')``` and a C file hello.c which looks like this (modified from the above blog post):
+In the hello-world directory you'll notice a Lua script named hello.lua which contains ```print('Hello, World!')``` and a C file, hello.c, which looks like this (modified from the above blog post):
 
 ```
 #include <stdio.h>
@@ -71,7 +71,7 @@ Lua uses a stack to exchange values with C. To get a value from Lua, you call Lu
 
 ### Example 1
 
-Suppose we want to compute the factorial of a number in Lua and make the result of the computation available in C. The Lua code is in the file factorial.lua:
+Suppose we want to compute the factorial of a number in Lua and make the result of the computation available in C. Go into the ```factorial``` directory. The Lua code is in the file factorial.lua:
 
 ```
 function factorial(n)
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-This example is pretty simple:
+This example is simple:
 
 1. First, we load the Lua file containing the factorial function
 - Call ```lua_pcall``` to execute the script and create the functions
