@@ -9,10 +9,11 @@ Note: This was initially setup to embed the LuaJIT, but I then discovered the is
 This repo includes the Torch distribution. Installation instrutions follow:
 
 - ```git clone https://github.com/klgraham/luajit-c-embedding.git ~/lua-c-embedding --recursive```
-- ```cd ~/lua-c-embedding```
-- ```TORCH_LUA_VERSION=LUA52 ./install.sh```
+- ```cd ~/lua-c-embedding/torch-distro```
+- install dependencies: ```bash install-deps```
+- install Lua, LuaRocks, and Torch: ```TORCH_LUA_VERSION=LUA52 ./install.sh```
 - ```cd ..```
-- setup an environment variable ```$TORCH_HOME``` pointing to your torch installation, which is ```~/lua-c-embedding/torch-distro/install```
+- creating an environment variable ```$TORCH_HOME``` pointing to your torch installation, which is ```~/lua-c-embedding/torch-distro/install```
 
 ## Hello, World!
 

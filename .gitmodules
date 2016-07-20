@@ -1,0 +1,5 @@
+[submodule "torch-distro"]
+	path = torch-distro
+	url = https://github.com/klgraham/distro 
+        branch = master
+
