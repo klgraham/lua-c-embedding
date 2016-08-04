@@ -11,7 +11,7 @@ This repo includes the Torch distribution. Installation instrutions follow:
 - ```git clone https://github.com/klgraham/luajit-c-embedding.git ~/lua-c-embedding --recursive```
 - ```cd ~/lua-c-embedding/torch-distro```
 - install dependencies: ```bash install-deps```
-- install Lua, LuaRocks, and Torch: ```TORCH_LUA_VERSION=LUA52 ./install.sh```
+- install Lua, LuaRocks, and Torch: ```TORCH_LUA_VERSION=LUA51 ./install.sh```
 - ```cd ..```
 - creating an environment variable ```$TORCH_HOME``` pointing to your torch installation, which is ```~/lua-c-embedding/torch-distro/install```. Note that if you skip this step, you'll need to update the makefiles in the JNI examples.
 
