@@ -51,7 +51,7 @@ int main()
 
 To compile the C, use:
 
-```gcc hello.c -pagezero_size 10000 -image_base 100000000 -I$(TORCH_HOME)/include -I/usr/local/include -L/usr/local/lib -L$(TORCH_HOME)/lib -llua -lm -o hello.out```, noting that ```-pagezero_size 10000 -image_base 100000000``` only needs to be included on macOS systems. Also note how the LuaJIT include directory has been included in the compiler search path. 
+```gcc hello.c -pagezero_size 10000 -image_base 100000000 -I$TORCH_HOME/include -I/usr/local/include -L/usr/local/lib -L$TORCH_HOME/lib -llua -lm -o hello.out```, noting that ```-pagezero_size 10000 -image_base 100000000``` only needs to be included on macOS systems. Also note how the LuaJIT include directory has been included in the compiler search path. 
 
 You can now execute the Lua script with ```./hello.out hello.lua```.
 
@@ -132,7 +132,7 @@ This example is simple:
 
 You'll notice that at the end we pop the returned value from the stack with ```lua_pop```. For such a simple example, this is not needed since we're killing Lua afterwards, but for more complex uses you'll definitely want to clean up the stack before moving on.
 
-You can compile with ```gcc factorial.c -pagezero_size 10000 -image_base 100000000 -I$(TORCH_HOME)/include -I/usr/local/include -L/usr/local/lib -L$(TORCH_HOME)/lib -llua -lm -o fact.out```. You can run with ```./fact.out <some integer>```
+You can compile with ```gcc factorial.c -pagezero_size 10000 -image_base 100000000 -I$TORCH_HOME/include -I/usr/local/include -L/usr/local/lib -L$TORCH_HOME/lib -llua -lm -o fact.out```. You can run with ```./fact.out <some integer>```
 
 ### Example 2
 
