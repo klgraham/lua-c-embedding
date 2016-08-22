@@ -373,5 +373,7 @@ JNIEXPORT jint JNICALL Java_ComputationJNI_sum(JNIEnv *env, jobject thisObj, jin
 
 ### Returning Function References
 
-Above, we stored a value in a global variable so that we could use it again. That would be find for storing a constant, such as Avogadro's number. But what if you want to call a function multiple times? Is a global variable the best way to go? Probably not. Lua lets you create a reference to a function. Lua's C API has a function ```luaL_ref`` that will store the value on top of the stack in the registry and return an integer that refers to the value in the registry. So, you can load the function onto the stack, call ```lua_ref``` to store it in the registry, and then use ```lua_rawgeti``` to push the function onto the stack again. See the example below.
+Above, we stored a value in a global variable so that we could use it again. That would be find for storing a constant, such as Avogadro's number. But what if you want to call a function multiple times? Is a global variable the best way to go? Probably not. Lua lets you create a reference to a function. Lua's C API has a function ```luaL_ref`` that will store the value on top of the stack in the registry and return an integer that refers to the value in the registry. So, you can load the function onto the stack, call ```lua_ref``` to store it in the registry, and then use ```lua_rawgeti``` to push the function onto the stack again. See the example in the ```function-ref-example``` directory. Build with the ```make``` and run with ```java LuaJNI <path to compiled library>.
+
+
 
